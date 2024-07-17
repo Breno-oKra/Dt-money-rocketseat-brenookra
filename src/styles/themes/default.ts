@@ -18,3 +18,6 @@ export const defaultTheme = {
     'red-500': '#AB222E',
     'red-700': '#7A1921',
   } as const
+
+  // as const - sem ele, quando importamos ${props => props.theme['green-500']} e passamos o mouse por cima, aparecera green-500 : string
+  // com as const - passando o mouse por cima aparecera green-500 : #00875f
