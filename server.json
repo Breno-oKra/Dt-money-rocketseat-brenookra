@@ -1,0 +1,20 @@
+{
+    "transactions":[
+        {
+            "id":1,
+            "description":"Desenvolvimento de Site",
+            "type":"income",
+            "category":"Venda",
+            "price":14000,
+            "createdAt": "2024-07-18T20:46:27.792Z"
+        },
+        {
+            "id":2,
+            "description":"Programinha de Sabado",
+            "type":"outcome",
+            "category":"Alimentação",
+            "price":250,
+            "createdAt": "2024-04-11T10:24:31.792Z"
+        }
+    ]
+}
