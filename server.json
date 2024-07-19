@@ -15,6 +15,14 @@
             "category":"Alimentação",
             "price":250,
             "createdAt": "2024-04-11T10:24:31.792Z"
+        },
+        {
+            "id":3,
+            "description":"Entreguinha de Sabado",
+            "type":"income",
+            "category":"entregas job",
+            "price":23.89,
+            "createdAt": "2024-04-11T10:24:31.792Z"
         }
     ]
 }

@@ -1,9 +1,13 @@
+import { useContext } from "react";
 import { Header } from "../../components/Header";
 import { SearchForm } from "../../components/SearchForm";
 import { Summary } from "../../components/Summary";
 import { PriceHightLight, TransactionsContainer, TransactionsTable } from "./style";
+import { TransactionsContext } from "../../contexts/transactionsContext";
+
 
 export function Transactions() {
+   const {transactions} = useContext(TransactionsContext)
     return (
         <div>
             <Header />
@@ -13,26 +17,24 @@ export function Transactions() {
                 <SearchForm />
                 <TransactionsTable>
                     <tbody>
-                        <tr>
-                            <td width="50%">Desenvolvimento de site</td>
-                            <td>
-                                <PriceHightLight variant="income">
-                                    R$ 12.000,00
-                                </PriceHightLight>
-                            </td>
-                            <td>venda</td>
-                            <td>13/03/2024</td>
-                        </tr>
-                        <tr>
-                            <td width="50%">Desenvolvimento de site</td>
-                            <td>
-                                <PriceHightLight variant="outcome">
-                                    - R$ 590,00
-                                </PriceHightLight>
-                            </td>
-                            <td>pizza</td>
-                            <td>18/03/2024</td>
-                        </tr>
+                        {
+                            transactions.map(transaction => {
+                                return (
+                                    <tr key={transaction.id}>
+                                        <td width="50%">{transaction.description}</td>
+                                        <td>
+                                            <PriceHightLight variant={transaction.type}>
+                                                R$ {transaction.price}
+                                            </PriceHightLight>
+                                        </td>
+                                        <td>{transaction.category}</td>
+                                        <td>{transaction.createdAt}</td>
+                                    </tr>
+                                )
+                            })
+                        }
+
+                   
                     </tbody>
                 </TransactionsTable>
             </TransactionsContainer>
