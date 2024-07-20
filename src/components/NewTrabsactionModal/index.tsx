@@ -4,6 +4,8 @@ import * as Dialog from '@radix-ui/react-dialog';
 import * as z from 'zod'
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useContext } from "react";
+import { TransactionsContext } from "../../contexts/transactionsContext";
 
 
 const newTransactionFormSchema = z.object({
@@ -16,16 +18,25 @@ const newTransactionFormSchema = z.object({
 })
 type NewTransactionsFormInputs = z.infer<typeof newTransactionFormSchema>;
 export const NewTransationModal = () => {
-    const { control, register, handleSubmit, formState: { isSubmitting } } = useForm<NewTransactionsFormInputs>({
+    const {createTransactions} = useContext(TransactionsContext)
+    const { control, register, handleSubmit, formState: { isSubmitting }, reset } = useForm<NewTransactionsFormInputs>({
         resolver: zodResolver(newTransactionFormSchema),
-        defaultValues:{
-            type:"income"
+        defaultValues: {
+            type: "income"
         }
     })
     async function handleCreateNewTransactioins(data: NewTransactionsFormInputs) {
-        await new Promise(resolve => setTimeout(resolve, 2000))
-        console.log(data)
+        const { description, category, price, type } = data
+        /*  await new Promise(resolve => setTimeout(resolve, 2000)) */
+        await createTransactions({
+            description,
+            price,
+            category,
+            type
+        })
+        reset()
     }
+   
     return (
 
         <Dialog.Portal>
@@ -41,7 +52,7 @@ export const NewTransationModal = () => {
                     <Controller
                         control={control}
                         name="type"
-                        render={({field}) => {
+                        render={({ field }) => {
                             return (
                                 <TransactionType onValueChange={field.onChange} value={field.value}>
                                     <TransactionTypeButton variant="income" value="income">
