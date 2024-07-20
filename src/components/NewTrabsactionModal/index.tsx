@@ -2,25 +2,28 @@ import { ArrowCircleDown, ArrowCircleUp, X } from "phosphor-react";
 import { Close, Content, Overlay, TransactionType, TransactionTypeButton } from "./style"
 import * as Dialog from '@radix-ui/react-dialog';
 import * as z from 'zod'
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 
 const newTransactionFormSchema = z.object({
-    description:z.string(),
-        price:z.number(),
-        category:z.string(),
-     /* type: z.enum(['income','outcome']), */
-     
-    
+    description: z.string(),
+    price: z.number(),
+    category: z.string(),
+    type: z.enum(['income', 'outcome']),
+
+
 })
 type NewTransactionsFormInputs = z.infer<typeof newTransactionFormSchema>;
 export const NewTransationModal = () => {
-    const {register,handleSubmit,formState:{isSubmitting}} = useForm<NewTransactionsFormInputs>({
-        resolver:zodResolver(newTransactionFormSchema)
+    const { control, register, handleSubmit, formState: { isSubmitting } } = useForm<NewTransactionsFormInputs>({
+        resolver: zodResolver(newTransactionFormSchema),
+        defaultValues:{
+            type:"income"
+        }
     })
-    async function handleCreateNewTransactioins(data:NewTransactionsFormInputs){
-        await new Promise(resolve => setTimeout(resolve,2000))
+    async function handleCreateNewTransactioins(data: NewTransactionsFormInputs) {
+        await new Promise(resolve => setTimeout(resolve, 2000))
         console.log(data)
     }
     return (
@@ -33,19 +36,27 @@ export const NewTransationModal = () => {
                 <form onSubmit={handleSubmit(handleCreateNewTransactioins)}
                 >
                     <input type="text" placeholder="Descrição" {...register("description")} required />
-                    <input type="number" placeholder="Preço" {...register("price",{valueAsNumber:true})} required />
+                    <input type="number" placeholder="Preço" {...register("price", { valueAsNumber: true })} required />
                     <input type="text" placeholder="Categoria" {...register("category")} required />
-                    <TransactionType>
-                        <TransactionTypeButton variant="income" value="income">
-                            <ArrowCircleUp size={24} />
-                            Entrada
-                        </TransactionTypeButton>
-                        <TransactionTypeButton variant="outcome" value="outcome">
-                            <ArrowCircleDown size={24} />
-                            Saida
-                        </TransactionTypeButton>
-                    </TransactionType>
-                 
+                    <Controller
+                        control={control}
+                        name="type"
+                        render={({field}) => {
+                            return (
+                                <TransactionType onValueChange={field.onChange} value={field.value}>
+                                    <TransactionTypeButton variant="income" value="income">
+                                        <ArrowCircleUp size={24} />
+                                        Entrada
+                                    </TransactionTypeButton>
+                                    <TransactionTypeButton variant="outcome" value="outcome">
+                                        <ArrowCircleDown size={24} />
+                                        Saida
+                                    </TransactionTypeButton>
+                                </TransactionType>
+                            )
+                        }}
+                    />
+
                     <button type="submit" disabled={isSubmitting}>Cadastrar</button>
                 </form>
 
