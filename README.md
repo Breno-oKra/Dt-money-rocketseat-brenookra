@@ -5,7 +5,8 @@
  
 </div>
 
-- site deployed : https://breno-okra-ignitetimer.netlify.app/
+- warning ! the api is to json-serve than it works only in development prodution
+- site deployed : https://dt-money-rocketseat-brenookra.netlify.app
 
 
 ## 🚀 Techniques
