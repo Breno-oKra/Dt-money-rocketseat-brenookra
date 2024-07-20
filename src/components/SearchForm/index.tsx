@@ -9,10 +9,13 @@ const searchFormSchema = z.object({
 })
 type SearchFormInput = z.infer<typeof searchFormSchema>
 export function SearchForm(){
-    const {register,handleSubmit} = useForm<SearchFormInput>({
+    /* desestruturando função dentro de objeto */
+    const {register,handleSubmit,formState:{isSubmitting}} = useForm<SearchFormInput>({
         resolver:zodResolver(searchFormSchema)
     })
-    function handleSearchTransactions(data:SearchFormInput){
+    /* simulando uma requisição para dar um delay na chamada, por isso usamos async e promise */
+    async function handleSearchTransactions(data:SearchFormInput){
+        await new Promise(resolve => setTimeout(resolve,2000))
         console.log(data)
     }
     return(
@@ -21,7 +24,7 @@ export function SearchForm(){
             type="text" 
             placeholder="Busque uma tranza ação"
             {...register("query")} />
-            <button type="submit">
+            <button type="submit" disabled={isSubmitting}>
                 <MagnifyingGlass size={20}/>
                 Buscar
                 </button>

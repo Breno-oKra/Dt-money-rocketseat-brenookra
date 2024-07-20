@@ -26,7 +26,14 @@ button{
     background: transparent;
     font-weight: bold;
     border-radius: 6px;
-    &:hover{
+    cursor: pointer;
+    &:disabled{
+        opacity: 0.6;
+        border: none;
+        transition:border 0.2s, opacity 0.2s;
+        cursor: not-allowed;
+    }
+    &:not(:disabled):hover{
         background:  ${props => props.theme['green-500']};
         border: 1px solid  ${props => props.theme['green-500']};
         color:  ${props => props.theme.white};

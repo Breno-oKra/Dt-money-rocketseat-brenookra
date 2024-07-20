@@ -1,7 +1,28 @@
 import { ArrowCircleDown, ArrowCircleUp, X } from "phosphor-react";
 import { Close, Content, Overlay, TransactionType, TransactionTypeButton } from "./style"
 import * as Dialog from '@radix-ui/react-dialog';
+import * as z from 'zod'
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+
+const newTransactionFormSchema = z.object({
+    description:z.string(),
+        price:z.number(),
+        category:z.string(),
+     /* type: z.enum(['income','outcome']), */
+     
+    
+})
+type NewTransactionsFormInputs = z.infer<typeof newTransactionFormSchema>;
 export const NewTransationModal = () => {
+    const {register,handleSubmit,formState:{isSubmitting}} = useForm<NewTransactionsFormInputs>({
+        resolver:zodResolver(newTransactionFormSchema)
+    })
+    async function handleCreateNewTransactioins(data:NewTransactionsFormInputs){
+        await new Promise(resolve => setTimeout(resolve,2000))
+        console.log(data)
+    }
     return (
 
         <Dialog.Portal>
@@ -9,11 +30,11 @@ export const NewTransationModal = () => {
             <Content>
                 <Dialog.Title>Nova Transação</Dialog.Title>
                 <Close><X /></Close>
-                <form action=""
+                <form onSubmit={handleSubmit(handleCreateNewTransactioins)}
                 >
-                    <input type="text" placeholder="Descrição" required />
-                    <input type="number" placeholder="Preço" required />
-                    <input type="text" placeholder="Categoria" required />
+                    <input type="text" placeholder="Descrição" {...register("description")} required />
+                    <input type="number" placeholder="Preço" {...register("price",{valueAsNumber:true})} required />
+                    <input type="text" placeholder="Categoria" {...register("category")} required />
                     <TransactionType>
                         <TransactionTypeButton variant="income" value="income">
                             <ArrowCircleUp size={24} />
@@ -25,7 +46,7 @@ export const NewTransationModal = () => {
                         </TransactionTypeButton>
                     </TransactionType>
                  
-                    <button type="submit">Cadastrar</button>
+                    <button type="submit" disabled={isSubmitting}>Cadastrar</button>
                 </form>
 
 

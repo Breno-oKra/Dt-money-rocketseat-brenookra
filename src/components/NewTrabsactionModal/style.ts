@@ -53,6 +53,12 @@ export const Content = styled(Dialog.Content)`
             border-radius: 6px;
             margin-top: 1.5rem;
             cursor: pointer;
+            &:disabled{
+                opacity: 0.6;
+                border: none;
+                transition:border 0.2s, opacity 0.2s;
+                cursor: not-allowed;
+            }
             &:hover{
                 background:  ${props => props.theme['green-700']};
                 transition: background-color 0.2s ;
@@ -66,10 +72,10 @@ export const TransactionType = styled(RadioGroup.Root)`
     gap: 1rem;
     margin-top: 0%.5rem;
 `
-interface TransactionPropsButton{
+interface TransactionPropsButton {
     variant: 'income' | 'outcome'
 }
-export const TransactionTypeButton = styled(RadioGroup.Item)<TransactionPropsButton>`
+export const TransactionTypeButton = styled(RadioGroup.Item) <TransactionPropsButton>`
      background:  ${props => props.theme['gray-700']};
      padding: 1rem;
      display: flex;
