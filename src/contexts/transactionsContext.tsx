@@ -1,6 +1,7 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
-import { api } from "../lib/axios";
 
+import { ReactNode, useEffect, useState, useCallback } from "react";
+import { api } from "../lib/axios";
+import { createContext } from "use-context-selector";
 interface TransactionTYpe {
     id: number;
     description: string;
@@ -27,7 +28,10 @@ interface TransactionProviderProps {
 export function TransactionsProvider({ children }: TransactionProviderProps) {
     const [transactions, setTransaction] = useState<TransactionTYpe[]>([])
 
-    async function createTransactions(data: CreateTransactionsInput) {
+
+    /* useCallback impede que uma função seja criada quando seu conteudo interno não muda */
+    /* funciona com em useEfect, so atualiza quando as variaveis de dependencia é atualizada*/
+    const createTransactions = useCallback(async function (data: CreateTransactionsInput) {
         const { description, category, price, type } = data
         /*  await new Promise(resolve => setTimeout(resolve, 2000)) */
         const response = await api.post('transactions', {
@@ -37,9 +41,9 @@ export function TransactionsProvider({ children }: TransactionProviderProps) {
             type,
             createdAt: new Date()
         })
-        setTransaction( state => [response.data,...state])
-    }
-    async function fetchTransactions(query?: string) {
+        setTransaction(state => [response.data, ...state])
+    }, [])
+    const fetchTransactions = useCallback(async function (query?: string) {
         const response = await api.get("transactions", {
             params: {
                 _sort: 'createdAt',
@@ -48,7 +52,7 @@ export function TransactionsProvider({ children }: TransactionProviderProps) {
             }
         })
         setTransaction(response.data)
-    }
+    }, [])
     useEffect(() => {
         fetchTransactions()
     }, [])

@@ -4,8 +4,8 @@ import * as Dialog from '@radix-ui/react-dialog';
 import * as z from 'zod'
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useContext } from "react";
 import { TransactionsContext } from "../../contexts/transactionsContext";
+import { useContextSelector } from "use-context-selector";
 
 
 const newTransactionFormSchema = z.object({
@@ -18,7 +18,12 @@ const newTransactionFormSchema = z.object({
 })
 type NewTransactionsFormInputs = z.infer<typeof newTransactionFormSchema>;
 export const NewTransationModal = () => {
-    const {createTransactions} = useContext(TransactionsContext)
+    /* const {createTransactions} = useContext(TransactionsContext) */
+    /* agora usamos useContextSelector, e junto dele passamos umas função e retornamos somente as informações que queremos observar */
+    /* fazemos isso para que não rederize muitas coisas */
+    const createTransactions = useContextSelector(TransactionsContext,(context) => {
+        return context.createTransactions
+    })
     const { control, register, handleSubmit, formState: { isSubmitting }, reset } = useForm<NewTransactionsFormInputs>({
         resolver: zodResolver(newTransactionFormSchema),
         defaultValues: {

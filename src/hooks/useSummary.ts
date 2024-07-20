@@ -1,8 +1,13 @@
-import { useContext } from "react"
+
 import { TransactionsContext } from "../contexts/transactionsContext"
+import { useContextSelector } from "use-context-selector"
 
 export function useSummary(){
-    const {transactions} = useContext(TransactionsContext)
+    /* const {transactions} = useContext(TransactionsContext) */
+    
+    const transactions = useContextSelector(TransactionsContext,(context) => {
+        return context.transactions
+    })
     // primeiro a função, depois a estrutura de dados inicial
     // const summary = transactions.reduce(() => {},{income:0,outcome:0,total:0})
 
@@ -23,3 +28,4 @@ export function useSummary(){
     )
     return summary
 }
+/* npx tsc --noEmit */
